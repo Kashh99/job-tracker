@@ -34,7 +34,7 @@ Status changes are written to the `events` table by a Postgres trigger, not by t
 
 1. Create a Supabase project.
 2. In the Supabase SQL editor, run `supabase/migrations/0001_init.sql`.
-3. Copy `.env.example` to `.env.local` and fill in the project URL and anon key (Project Settings → API).
+3. Copy `.env.example` to `.env.local` and fill in the project URL and publishable key (Project Settings → API Keys).
 4. In Supabase Auth → URL Configuration, add `http://localhost:3000/auth/confirm` (and your production URL's `/auth/confirm`) to the redirect URLs. For single-user use you can instead turn off "Confirm email".
 5. Install and run:
 
@@ -46,4 +46,4 @@ npm test
 
 ## Deploy
 
-Import the repo into Vercel and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` as environment variables.
+Import the repo into Vercel and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` as environment variables.
