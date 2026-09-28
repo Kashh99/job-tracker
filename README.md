@@ -2,7 +2,7 @@
 
 **Problem:** job hunting across spreadsheets and inboxes means applications go quiet and nobody follows up. This app makes logging an application a 30-second job, reminds you when one goes stale, and shows which sources actually get replies.
 
-**Live:** _add the Vercel URL here after deploying_
+**Live:** https://job-tracker-teal-five.vercel.app
 
 <!-- Add a screenshot or GIF of the board here. -->
 
@@ -35,7 +35,7 @@ Status changes are written to the `events` table by a Postgres trigger, not by t
 1. Create a Supabase project.
 2. In the Supabase SQL editor, run `supabase/migrations/0001_init.sql`.
 3. Copy `.env.example` to `.env.local` and fill in the project URL and publishable key (Project Settings → API Keys).
-4. In Supabase Auth → URL Configuration, add `http://localhost:3000/auth/confirm` (and your production URL's `/auth/confirm`) to the redirect URLs. For single-user use you can instead turn off "Confirm email".
+4. In Supabase Auth → URL Configuration, add `http://localhost:3000/auth/confirm` and `https://<your-domain>/auth/confirm` to the redirect URLs. For single-user use you can instead turn off "Confirm email".
 5. Install and run:
 
 ```bash
