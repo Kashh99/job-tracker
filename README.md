@@ -52,7 +52,7 @@ Import the repo into Vercel and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_
 
 ### Email import
 
-Extraction runs through Vercel AI Gateway (`anthropic/claude-haiku-4.5`). On Vercel it authenticates with OIDC; locally, run `vercel env pull` or set `AI_GATEWAY_API_KEY`. The Gateway needs a card on file for the Vercel team. Without it, imports fall back to pattern matching (`src/lib/extract-basic.ts`), which reads the common ATS templates but finds fewer fields.
+Extraction runs through Vercel AI Gateway (`google/gemini-2.5-flash-lite`, which the Gateway free tier allows). On Vercel it authenticates with OIDC; locally, run `vercel env pull` or set `AI_GATEWAY_API_KEY`. The Gateway needs a card on file for the Vercel team. Without it, imports fall back to pattern matching (`src/lib/extract-basic.ts`), which reads the common ATS templates but finds fewer fields.
 
 Pasting emails works with just that. For automatic forwarding:
 

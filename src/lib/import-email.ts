@@ -13,9 +13,10 @@ import {
 import { basicExtract } from "./extract-basic";
 import type { Application, InboundEmail } from "./types";
 
-// Cheap and accurate enough for pulling a few fields out of a short email.
-// Routed through Vercel AI Gateway (OIDC on Vercel, AI_GATEWAY_API_KEY elsewhere).
-const EXTRACTION_MODEL = "anthropic/claude-haiku-4.5";
+// Cheap, available on the AI Gateway free tier, and accurate enough for pulling
+// a few fields out of a short email. Routed through Vercel AI Gateway (OIDC on
+// Vercel, AI_GATEWAY_API_KEY elsewhere).
+const EXTRACTION_MODEL = "google/gemini-2.5-flash-lite";
 
 export type EmailInput = {
   messageId: string | null;
