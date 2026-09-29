@@ -7,6 +7,7 @@ import {
   deleteApplication,
   deleteEvent,
   linkContact,
+  markReviewed,
   updateApplication,
 } from "@/app/actions";
 import {
@@ -14,12 +15,16 @@ import {
   SOURCE_LABELS,
   STATUSES,
   STATUS_LABELS,
+  WORK_MODES,
+  WORK_MODE_LABELS,
   type AppEvent,
   type Application,
   type Contact,
   type Status,
 } from "@/lib/types";
 import { ContactForm } from "@/components/contact-form";
+import { CompanyAvatar } from "@/components/company-avatar";
+import { statusColor } from "@/lib/ui";
 
 const EVENT_LABELS: Record<AppEvent["type"], string> = {
   status_change: "Status",
@@ -51,16 +56,37 @@ export default async function ApplicationPage({ params }: PageProps<"/applicatio
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-baseline gap-3">
+      <div className="space-y-3">
         <Link href="/" className="text-sm text-muted hover:text-foreground">← Board</Link>
-        <h1 className="text-xl font-semibold">{app.company}</h1>
-        <span className="text-muted">{app.role}</span>
-        {app.job_url && (
-          <a href={app.job_url} target="_blank" rel="noreferrer" className="text-sm text-accent hover:underline">
-            Job post ↗
-          </a>
-        )}
+        <div className="flex flex-wrap items-center gap-3">
+          <CompanyAvatar company={app.company} size="lg" />
+          <div className="min-w-0">
+            <h1 className="text-2xl font-semibold tracking-tight">{app.company}</h1>
+            <p className="text-muted">{app.role}</p>
+          </div>
+          <span className="chip ml-auto gap-1.5 text-foreground">
+            <span aria-hidden className="size-2 rounded-full" style={{ background: statusColor(app.status) }} />
+            {STATUS_LABELS[app.status]}
+          </span>
+          {app.job_url && (
+            <a href={app.job_url} target="_blank" rel="noreferrer" className="btn">
+              Job post ↗
+            </a>
+          )}
+        </div>
       </div>
+
+      {app.needs_review && (
+        <div className="flex flex-wrap items-center gap-3 rounded-xl border border-accent/30 bg-accent/5 p-3 text-sm">
+          <span className="min-w-0 flex-1">
+            <span className="font-medium">Imported from email.</span>{" "}
+            <span className="text-muted">Check the details below; saving the form also marks it reviewed.</span>
+          </span>
+          <form action={markReviewed.bind(null, id)}>
+            <button className="btn">Looks right</button>
+          </form>
+        </div>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-[1fr_22rem]">
         <form action={updateApplication.bind(null, id)} className="card grid gap-3 p-4 sm:grid-cols-2">
@@ -81,6 +107,16 @@ export default async function ApplicationPage({ params }: PageProps<"/applicatio
             </select>
           </div>
           <Field label="Date applied" name="applied_date" type="date" defaultValue={app.applied_date} />
+          <Field label="Location" name="location" defaultValue={app.location} />
+          <div>
+            <label className="label" htmlFor="work_mode">Work mode</label>
+            <select className="input" id="work_mode" name="work_mode" defaultValue={app.work_mode ?? ""}>
+              <option value="">—</option>
+              {WORK_MODES.map((m) => <option key={m} value={m}>{WORK_MODE_LABELS[m]}</option>)}
+            </select>
+          </div>
+          <Field label="Salary" name="salary" defaultValue={app.salary} />
+          <Field label="Job ID" name="job_ref" defaultValue={app.job_ref} />
           <Field label="Resume version" name="resume_version" defaultValue={app.resume_version} />
           <div className="sm:col-span-2">
             <label className="label" htmlFor="notes">Notes</label>

@@ -4,7 +4,18 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/supabase/server";
 import { today } from "@/lib/dates";
-import { EVENT_TYPES, SOURCES, STATUSES, type EventType, type Source, type Status } from "@/lib/types";
+import { importEmail, type ImportResult } from "@/lib/import-email";
+import { truncate } from "@/lib/email";
+import {
+  EVENT_TYPES,
+  SOURCES,
+  STATUSES,
+  WORK_MODES,
+  type EventType,
+  type Source,
+  type Status,
+  type WorkMode,
+} from "@/lib/types";
 
 function text(form: FormData, key: string): string | null {
   const value = form.get(key);
@@ -58,6 +69,12 @@ export async function updateApplication(id: string, form: FormData) {
       applied_date: text(form, "applied_date"),
       resume_version: text(form, "resume_version"),
       notes: text(form, "notes"),
+      location: text(form, "location"),
+      work_mode: oneOf<WorkMode>(text(form, "work_mode"), WORK_MODES),
+      salary: text(form, "salary"),
+      job_ref: text(form, "job_ref"),
+      // Saving the form counts as reviewing an imported application.
+      needs_review: false,
     })
     .eq("id", id);
   check(error);
@@ -78,6 +95,42 @@ export async function deleteApplication(id: string) {
   check(error);
   revalidatePath("/", "layout");
   redirect("/");
+}
+
+export async function markReviewed(id: string) {
+  const { supabase } = await requireUser();
+  const { error } = await supabase.from("applications").update({ needs_review: false }).eq("id", id);
+  check(error);
+  revalidatePath("/", "layout");
+}
+
+// Email import
+
+export type PasteImportState = { result?: ImportResult; error?: string };
+
+export async function importPastedEmail(_prev: PasteImportState, form: FormData): Promise<PasteImportState> {
+  const { supabase, user } = await requireUser();
+  const body = text(form, "email");
+  if (!body || body.length < 40) return { error: "Paste the full email text" };
+
+  const result = await importEmail(supabase, user.id, {
+    messageId: null,
+    from: null,
+    subject: null,
+    text: truncate(body),
+  });
+  revalidatePath("/", "layout");
+  return { result };
+}
+
+export async function rotateInboxToken() {
+  const { supabase, user } = await requireUser();
+  const { error } = await supabase
+    .from("users")
+    .update({ inbox_token: crypto.randomUUID() })
+    .eq("id", user.id);
+  check(error);
+  revalidatePath("/settings");
 }
 
 // Events

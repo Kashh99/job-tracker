@@ -19,7 +19,7 @@ export function QuickAdd() {
           formRef.current?.querySelector<HTMLInputElement>("[name=company]")?.focus();
         })
       }
-      className="card flex flex-wrap items-end gap-2 p-3"
+      className="flex flex-wrap items-end gap-2"
     >
       <div className="min-w-36 flex-1">
         <label className="label" htmlFor="qa-company">Company</label>

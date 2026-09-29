@@ -28,6 +28,15 @@ export const SOURCE_LABELS: Record<Source, string> = {
   other: "Other",
 };
 
+export const WORK_MODES = ["remote", "hybrid", "onsite"] as const;
+export type WorkMode = (typeof WORK_MODES)[number];
+
+export const WORK_MODE_LABELS: Record<WorkMode, string> = {
+  remote: "Remote",
+  hybrid: "Hybrid",
+  onsite: "On-site",
+};
+
 export const EVENT_TYPES = ["status_change", "follow_up", "interview", "note"] as const;
 export type EventType = (typeof EVENT_TYPES)[number];
 
@@ -43,6 +52,11 @@ export type Application = {
   last_activity_date: string;
   resume_version: string | null;
   notes: string | null;
+  location: string | null;
+  work_mode: WorkMode | null;
+  salary: string | null;
+  job_ref: string | null;
+  needs_review: boolean;
   created_at: string;
   updated_at: string;
 };
@@ -65,5 +79,18 @@ export type AppEvent = {
   type: EventType;
   detail: string | null;
   event_date: string;
+  created_at: string;
+};
+
+export type InboundEmail = {
+  id: string;
+  user_id: string;
+  message_id: string | null;
+  from_address: string | null;
+  subject: string | null;
+  body_excerpt: string | null;
+  status: "imported" | "duplicate" | "skipped" | "failed";
+  detail: string | null;
+  application_id: string | null;
   created_at: string;
 };

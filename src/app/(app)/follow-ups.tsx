@@ -5,7 +5,7 @@ import type { Application } from "@/lib/types";
 
 export function FollowUps({ apps, day }: { apps: Application[]; day: string }) {
   return (
-    <section className="rounded-lg border border-warn/40 bg-warn-bg p-3">
+    <section className="rounded-xl border border-warn/40 bg-warn-bg p-4">
       <h2 className="mb-2 text-sm font-semibold text-warn">
         Follow up ({apps.length}) — no movement since applying
       </h2>

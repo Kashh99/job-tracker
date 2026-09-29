@@ -1,7 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PUBLIC_PATHS = ["/login", "/auth"];
+// /api/inbound is the email webhook; it authenticates with the inbox token instead.
+const PUBLIC_PATHS = ["/login", "/auth", "/api/inbound"];
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
