@@ -4,7 +4,7 @@
 
 **Live:** https://job-tracker-teal-five.vercel.app
 
-<!-- Add a screenshot or GIF of the board here. -->
+![Job Tracker sign-in - the board itself is login-protected](screenshot.png)
 
 ## Features
 
@@ -47,3 +47,4 @@ npm test
 ## Deploy
 
 Import the repo into Vercel and set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` as environment variables.
+
